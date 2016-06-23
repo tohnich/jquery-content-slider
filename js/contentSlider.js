@@ -12,6 +12,7 @@ $(document).ready(function () {
     var speed = 500;                // fade speed
     var autoSwitch = true;          // auto slider option
     var autoSwitch_speed = 4000     // Auto slider speed
+    var slideInterval;
 
     // Add initial active class
     $('.slide').first().addClass('active');
@@ -28,13 +29,8 @@ $(document).ready(function () {
     // Prev click handler
     $('#prev').on( 'click', getPrevSlide );
 
-    // Is autoSwitch true?
-    if( autoSwitch == true ) {
-
-        // Yes, set interval to change slides
-        setInterval( getNextSlide, autoSwitch_speed );
-
-    }
+    // Set slide change interval
+    setSliderSwitchInterval( false );
 
 
 
@@ -42,7 +38,7 @@ $(document).ready(function () {
     // Name: getNextSlide
     // Abstract: Hides current slide and shows next slide for slider
     // -----------------------------------------------------------------
-    function getNextSlide() {
+    function getNextSlide( autoSwitch, slideInterval ) {
 
         // Replace active class with oldActive on current slide
         $('.active').removeClass('active').addClass('oldActive');
@@ -69,6 +65,9 @@ $(document).ready(function () {
         // Fade in active slide
         $('.active').fadeIn(speed);
 
+        // Clear then set slide change interval
+        setSliderSwitchInterval( true );
+
     }
 
 
@@ -77,7 +76,7 @@ $(document).ready(function () {
     // Name: getPrevSlide
     // Abstract: Hides current slide and shows previous slide for slider
     // -----------------------------------------------------------------
-    function getPrevSlide() {
+    function getPrevSlide( autoSwitch, slideInterval ) {
 
         // Replace active class with oldActive on currentSlide
         $('.active').removeClass('active').addClass('oldActive');
@@ -103,6 +102,35 @@ $(document).ready(function () {
 
         // Fade in active slide
         $('.active').fadeIn(speed);
+
+        // Clear then set slide change interval
+        setSliderSwitchInterval( true );
+
+    }
+
+
+
+    // -----------------------------------------------------------------
+    // Name: setSliderSwitchInterval
+    // Abstract: Set interval which slide automatically change
+    // -----------------------------------------------------------------
+    function setSliderSwitchInterval( resetInterval ) {
+
+        // Should the interval be cleared?
+        if( resetInterval == true ) {
+
+            // Yes, clear interval
+            clearInterval( slideInterval );
+
+        }
+
+        // Is autoSwitch true?
+        if( autoSwitch == true ) {
+
+            // Yes, set interval to change slides
+            slideInterval = setInterval( getNextSlide, autoSwitch_speed );
+
+        }
 
     }
 
